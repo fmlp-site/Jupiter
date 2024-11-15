@@ -1,5 +1,5 @@
-const apiURL = "https://<SEU-RESTDB-URL>.restdb.io/rest/candidatos";
-const headers = { "x-apikey": "<SUA-API-KEY>", "Content-Type": "application/json" };
+const apiURL = "https://f1234-7a59.restdb.io/rest/acessocandidato?max=2";
+const headers = { "x-apikey": "671fb8e5b0c910dad08f7b43", "Content-Type": "application/json" };
 
 // Cadastro
 document.getElementById("btnCadastro").addEventListener("click", async () => {
@@ -27,6 +27,10 @@ document.getElementById("btnLogin").addEventListener("click", async () => {
   });
 
   const data = await response.json();
-  if (data.length > 0) window.location.href = "centraldocandidato.html";
-  else alert("Email ou senha inválidos!");
+  if (data.length > 0) {
+    localStorage.setItem("candidatoLogado", JSON.stringify(data[0]));
+    window.location.href = "centraldocandidato.html";
+  } else {
+    alert("Email ou senha inválidos!");
+  }
 });
