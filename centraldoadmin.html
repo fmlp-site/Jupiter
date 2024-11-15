@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Central do Administrador</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Central do Administrador</h1>
+    <h3>Bem-vindo, <span id="nomeAdmin"></span>!</h3>
+    <p>Gerencie os vestibulares e candidatos aqui.</p>
+    <button id="btnLogout">Sair</button>
+  </div>
+  <script>
+    // Verificação de login
+    const adminLogado = JSON.parse(localStorage.getItem("adminLogado"));
+    if (!adminLogado) {
+      alert("Você precisa estar logado para acessar esta página.");
+      window.location.href = "acessoadmin.html";
+    } else {
+      document.getElementById("nomeAdmin").textContent = adminLogado.usuario;
+    }
+
+    // Logout
+    document.getElementById("btnLogout").addEventListener("click", () => {
+      localStorage.removeItem("adminLogado");
+      window.location.href = "acessoadmin.html";
+    });
+  </script>
+</body>
+</html>
