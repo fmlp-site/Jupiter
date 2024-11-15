@@ -14,20 +14,45 @@
     <button id="btnLogout">Sair</button>
   </div>
   <script>
-    // Verificação de login
-    const adminLogado = JSON.parse(localStorage.getItem("adminLogado"));
-    if (!adminLogado) {
-      alert("Você precisa estar logado para acessar esta página.");
-      window.location.href = "acessoadmin.html";
-    } else {
-      document.getElementById("nomeAdmin").textContent = adminLogado.usuario;
+    const apiURLAdmin = "https://f1234-7a59.restdb.io/rest/acessoadmin?max=2";
+    const apiKey = "671fb8e5b0c910dad08f7b43";
+
+    async function verificarLoginAdmin() {
+      const params = new URLSearchParams(window.location.search);
+      const adminId = params.get("id");
+
+      if (!adminId) {
+        alert("Você precisa estar logado para acessar esta página.");
+        window.location.href = "acessoadmin.html";
+        return;
+      }
+
+      const response = await fetch(`${apiURLAdmin}/${adminId}`, {
+        headers: { "x-apikey": apiKey },
+      });
+
+      if (!response.ok) {
+        alert("Erro ao verificar login. Faça login novamente.");
+        window.location.href = "acessoadmin.html";
+        return;
+      }
+
+      const admin = await response.json();
+      if (!admin) {
+        alert("Administrador não encontrado.");
+        window.location.href = "acessoadmin.html";
+        return;
+      }
+
+      document.getElementById("nomeAdmin").textContent = admin.usuario;
     }
 
     // Logout
     document.getElementById("btnLogout").addEventListener("click", () => {
-      localStorage.removeItem("adminLogado");
       window.location.href = "acessoadmin.html";
     });
+
+    verificarLoginAdmin();
   </script>
 </body>
 </html>
