@@ -3,24 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acesso do Candidato</title>
+  <title>Central do Candidato</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Acesso do Candidato</h1>
-    <form id="candidatoForm">
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="senha" placeholder="Senha" required>
-      <button type="button" id="btnLogin">Login</button>
-      <hr>
-      <h3>Cadastro</h3>
-      <input type="text" id="nome" placeholder="Nome Completo" required>
-      <input type="email" id="cadEmail" placeholder="Email" required>
-      <input type="password" id="cadSenha" placeholder="Senha" required>
-      <button type="button" id="btnCadastro">Cadastrar</button>
-    </form>
+    <h1>Central do Candidato</h1>
+    <h3>Bem-vindo, <span id="nomeCandidato"></span>!</h3>
+    <p>Esta é sua página pessoal. Aqui você pode gerenciar suas informações.</p>
+    <button id="btnLogout">Sair</button>
   </div>
-  <script src="candidato.js"></script>
+  <script>
+    const apiURL = "https://f1234-7a59.restdb.io/rest/acessocandidato?max=2";
+    const apiKey = "671fb8e5b0c910dad08f7b43";
+
+    async function verificarLogin() {
+      const params = new URLSearchParams(window.location.search);
+      const candidatoId = params.get("id");
+
+      if (!candidatoId) {
+        alert("Você precisa estar logado para acessar esta página.");
+        window.location.href = "acessocandidato.html";
+        return;
+      }
+
+      const response = await fetch(`${apiURL}/${candidatoId}`, {
+        headers: { "x-apikey": apiKey },
+      });
+
+      if (!response.ok) {
+        alert("Erro ao verificar login. Faça login novamente.");
+        window.location.href = "acessocandidato.html";
+        return;
+      }
+
+      const candidato = await response.json();
+      if (!candidato) {
+        alert("Candidato não encontrado.");
+        window.location.href = "acessocandidato.html";
+        return;
+      }
+
+      document.getElementById("nomeCandidato").textContent = candidato.nome;
+    }
+
+    // Logout
+    document.getElementById("btnLogout").addEventListener("click", () => {
+      window.location.href = "acessocandidato.html";
+    });
+
+    verificarLogin();
+  </script>
 </body>
 </html>
